@@ -1,0 +1,167 @@
+
+
+body {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    background-color: rgb(8, 71, 71);
+  }
+.buttonNumerico
+{
+    color: rgb(184, 5, 5);
+    font-size: 140%;
+    background-color: #000000;
+    border-radius: 7px;
+    width: 30px;
+}
+
+
+.buttonOperaciones
+{
+    color: rgb(11, 189, 50);
+    font-size: 140%;
+    background-color: #000000;
+    border-radius: 7px;
+    width: 30px;
+}
+
+.buttonIgual
+{
+    color: rgb(255, 255, 255);
+    font-size: 140%;
+    background-color: #000000;
+    border-radius: 7px;
+    width: 30px;
+}
+  
+.buttonBorrar
+{
+    color: rgb(0, 0, 0);
+    font-size: 100%;
+    background-color: #311188;
+    border-radius: 7px;
+    width: 137px;
+    height: 25px;
+}
+
+.buttonBorrarNumero
+{
+    color: rgb(0, 0, 0);
+    font-size: 140%;
+    background-color: #f8f4f4;
+    border-radius: 7px;
+    width: 30px;
+}
+.displayResult
+{
+    color: rgb(0, 0, 0);
+    font-size: 100%;
+    background-color: #f3f3f3;
+    border-radius: 7px;
+    width: 137px;
+    height: 25px;
+}
+
+.calculatorContainer {
+    display: grid;
+    grid-template-rows: auto;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 5px;
+    justify-content: center;
+    align-items: center;
+    background-color: rgb(8, 71, 71);
+  }
+  
+  .calculatoRow {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 5px;
+  }
+.buttonNumerico
+{
+    color: rgb(184, 5, 5);
+    font-size: 140%;
+    background-color: #000000;
+    border-radius: 7px;
+    width: 30px;
+}
+
+
+.buttonOperaciones
+{
+    color: rgb(11, 189, 50);
+    font-size: 140%;
+    background-color: #000000;
+    border-radius: 7px;
+    width: 30px;
+}
+
+.buttonIgual
+{
+    color: rgb(255, 255, 255);
+    font-size: 140%;
+    background-color: #000000;
+    border-radius: 7px;
+    width: 130px;
+}
+  
+.buttonBorrar
+{
+    color: rgb(0, 0, 0);
+    font-size: 100%;
+    background-color: #311188;
+    border-radius: 7px;
+    width: 137px;
+    height: 25px;
+}
+
+.buttonCientifico {
+    color: rgb(255, 255, 255);
+    font-size: 100%;
+    background-color: #000000;
+    border-radius: 7px;
+    width: 70px;
+  }
+
+.buttonEspecial {
+ color: rgb(255, 255, 255);
+    font-size: 100%;
+    background-color: #000000;
+    border-radius: 7px;
+    width: 70px;
+}
+.buttonBorrarNumero
+{
+    color: rgb(0, 0, 0);
+    font-size: 140%;
+    background-color: #f8f4f4;
+    border-radius: 7px;
+    width: 30px;
+}
+.displayResult
+{
+    color: rgb(0, 0, 0);
+    font-size: 100%;
+    background-color: #f3f3f3;
+    border-radius: 7px;
+    width: 300px;
+    height: 50px;
+}
+
+.calculatorContainer {
+    display: grid;
+    grid-template-rows: auto;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 5px;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: rgb(8, 71, 71);
+  }
+  
+  .calculatoRow {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 5px;
+  }
