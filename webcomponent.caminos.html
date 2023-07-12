@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Tickets de Falla y Requerimientos</title>
+  <style>
+    .ticket {
+      padding: 10px;
+      margin-bottom: 10px;
+      border-radius: 5px;
+      font-family: Arial, sans-serif;
+    }
+    .ticket.low {
+      background-color: #e6f7ff;
+    }
+    .ticket.medium {
+      background-color: #fffcdd;
+    }
+    .ticket.high {
+      background-color: #ffd9d9;
+    }
+    button {
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+  <ticket-form></ticket-form>
+  <ticket-list></ticket-list>
+
+  <script>
+    class TicketForm extends HTMLElement {
+      connectedCallback() {
+        this.render();
+        this.setupListeners();
+      }
+
+      render() {
+        this.innerHTML = `
+          <form id="ticketForm">
+            <h3>Agregar Ticket</h3>
+            <label for="description">Descripción:</label>
+            <input type="text" id="description" required>
+            <label for="priority">Prioridad:</label>
+            <select id="priority" required>
+              <option value="low">Baja</option>
+              <option value="medium">Media</option>
+              <option value="high">Alta</option>
+            </select>
+            <button type="submit">Agregar</button>
+          </form>
+        `;
+      }
+
+      setupListeners() {
+        const form = this.querySelector('#ticketForm');
+        form.addEventListener('submit', this.handleSubmit.bind(this));
+      }
+
+      handleSubmit(event) {
+        event.preventDefault();
+
+        const descriptionInput = this.querySelector('#description');
+        const priorityInput = this.querySelector('#priority');
+
+        const description = descriptionInput.value;
+        const priority = priorityInput.value;
+
+        const confirmed = confirm('¿Estás seguro de que deseas agregar este ticket?');
+
+        if (confirmed) {
+          this.createTicket(description, priority);
+          descriptionInput.value = '';
+          priorityInput.selectedIndex = 0;
+        }
+      }
+
+      createTicket(description, priority) {
+        const ticketList = document.querySelector('ticket-list');
+        if (ticketList) {
+          ticketList.addTicket(description, priority);
+        }
+      }
+    }
+
+    class TicketList extends HTMLElement {
+      connectedCallback() {
+        this.render();
+      }
+
+      render() {
+        this.innerHTML = `
+          <h3>Tickets Registrados</h3>
+          <div id="tickets"></div>
+        `;
+      }
+
+      addTicket(description, priority) {
+        const ticketsContainer = this.querySelector('#tickets');
+
+        const ticket = document.createElement('div');
+        ticket.className = `ticket ${priority}`;
+        ticket.textContent = `Descripción: ${description}, Prioridad: ${priority.charAt(0).toUpperCase() + priority.slice(1)}`;
+
+        ticketsContainer.appendChild(ticket);
+      }
+    }
+
+    customElements.define('ticket-form', TicketForm);
+    customElements.define('ticket-list', TicketList);
+  </script>
+</body>
+</html>
