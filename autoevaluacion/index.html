@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <title>JS Bin</title>
+</head>
+<body>
+ 
+  <script type="text/javascript">
+    // WebComponents (MVC) se selecciona para actualizar el contacto haciendo click en él y también se elimina haciendo click
+
+    const categoryStyles = {
+      amigos: {
+        backgroundColor: 'blue'
+      },
+      trabajo: {
+        backgroundColor: 'green'
+      },
+      estudio: {
+        backgroundColor: 'yellow'
+      },
+      familia: {
+        backgroundColor: 'pink'
+      },
+      favoritos: {
+        backgroundColor: 'gray'
+      },
+      servicios: {
+        backgroundColor: 'coral'
+      }
+    };
+
+    class CRUDModel {
+      constructor() {
+        this.dataContainer = [];
+      }
+
+      create(data) {
+        this.dataContainer.push(data);
+        console.log(this.dataContainer);
+      }
+
+      edit(row, newData) {
+        const index = Array.from(row.parentNode.children).indexOf(row);
+        if (index !== -1) {
+          this.dataContainer[index] = newData;
+          console.log(this.dataContainer);
+        }
+      }
+
+      delete(row) {
+        const index = Array.from(row.parentNode.children).indexOf(row);
+        if (index !== -1) {
+          this.dataContainer.splice(index, 1);
+          console.log(this.dataContainer);
+        }
+      }
+    }
+
+    class CRUDViewController {
+      constructor(view, model) {
+        this.innerView = view;
+        this.innerModel = model;
+        this.innerView.createButton.onclick = () => this.oncreatebuttonclick();
+        this.innerView.updateButton.onclick = () => this.onupdatebuttonclick();
+        this.innerView.deleteButton.onclick = () => this.ondeletebuttonclick();
+      }
+
+      oncreatebuttonclick() {
+        let dataFromView = this.innerView.getDataInput();
+        this.innerModel.create(dataFromView);
+        this.innerView.render(this.innerModel.dataContainer);
+      }
+
+      onupdatebuttonclick() {
+        const selectedRow = this.innerView.getSelectedRow();
+        if (selectedRow) {
+          let newData = this.innerView.getDataInput();
+          this.innerModel.edit(selectedRow, newData);
+          this.innerView.render(this.innerModel.dataContainer);
+        }
+      }
+
+      ondeletebuttonclick() {
+        const selectedRow = this.innerView.getSelectedRow();
+        if (selectedRow) {
+          this.innerModel.delete(selectedRow);
+          this.innerView.render(this.innerModel.dataContainer);
+        }
+      }
+    }
+
+    class CRUDView extends HTMLElement {
+      constructor() {
+        super();
+
+        this.viewTitle = document.createElement('h1');
+        this.viewTitle.innerText = 'CRUD Application Example';
+
+        this.createButton = document.createElement('button');
+        this.createButton.innerText = 'Create';
+
+        this.nameInput = document.createElement('input');
+        this.nameInput.type = 'text';
+        this.nameInput.placeholder = 'Name...';
+
+        this.lastNameInput = document.createElement('input');
+        this.lastNameInput.type = 'text';
+        this.lastNameInput.placeholder = 'Last Name...';
+
+        this.phoneNumberInput = document.createElement('input');
+        this.phoneNumberInput.type = 'text';
+        this.phoneNumberInput.placeholder = 'Phone Number...';
+
+        this.optionsInput = document.createElement('select');
+
+        for (const category in categoryStyles) {
+          const option = document.createElement('option');
+          option.value = category;
+          option.text = category.charAt(0).toUpperCase() + category.slice(1);
+          this.optionsInput.add(option);
+        }
+
+        this.updateButton = document.createElement('button');
+        this.updateButton.innerText = 'Update';
+
+        this.deleteButton = document.createElement('button');
+        this.deleteButton.innerText = 'Delete';
+
+        this.dataTitle = document.createElement('h4');
+        this.dataTitle.innerText = 'Data:';
+
+        this.result = document.createElement('table');
+        this.resultHeader = this.result.createTHead();
+        this.resultBody = this.result.createTBody();
+
+        this.resultHeaderRow = this.resultHeader.insertRow();
+        this.resultHeaderRow.innerHTML = '<th>Name</th><th>Last Name</th><th>Phone Number</th><th>Category</th>';
+
+        this.appendChild(this.viewTitle);
+        this.appendChild(this.nameInput);
+        this.appendChild(this.optionsInput);
+        this.appendChild(document.createElement('br'));
+        this.appendChild(this.lastNameInput);
+        this.appendChild(document.createElement('br'));
+        this.appendChild(this.phoneNumberInput);
+        this.appendChild(document.createElement('br'));
+        
+        this.appendChild(document.createElement('br'));
+        this.appendChild(document.createElement('br'));
+        this.appendChild(this.updateButton);
+        this.appendChild(this.deleteButton);
+        this.appendChild(this.createButton);
+        this.appendChild(document.createElement('br'));
+        this.appendChild(this.dataTitle);
+        this.appendChild(this.result);
+
+        // Controller
+        this.innerModel = new CRUDModel();
+        this.innerController = new CRUDViewController(this, this.innerModel);
+      }
+
+      connectedCallback() {
+
+      }
+
+      disconnectedCallback() {
+
+      }
+
+      getDataInput() {
+        let data = {
+          name: this.nameInput.value,
+          lastName: this.lastNameInput.value,
+          phoneNumber: this.phoneNumberInput.value,
+          category: this.optionsInput.value
+        };
+
+        return data;
+      }
+
+      getSelectedRow() {
+        let selectedRow = this.resultBody.querySelector('tr.selected');
+        if (selectedRow) {
+          return selectedRow;
+        }
+        return null;
+      }
+
+      render(dataContainer) {
+        this.resultBody.innerHTML = '';
+
+        for (let i = 0; i < dataContainer.length; i++) {
+          let rowData = dataContainer[i];
+          let row = this.resultBody.insertRow();
+
+          row.insertCell().appendChild(document.createTextNode(rowData.name));
+          row.insertCell().appendChild(document.createTextNode(rowData.lastName));
+          row.insertCell().appendChild(document.createTextNode(rowData.phoneNumber));
+          row.insertCell().appendChild(document.createTextNode(rowData.category));
+
+          row.onclick = () => this.onrowclick(row);
+
+          row.style.backgroundColor = categoryStyles[rowData.category].backgroundColor;
+        }
+      }
+
+      onrowclick(row) {
+        if (row.classList.contains('selected')) {
+          row.classList.remove('selected');
+        } else {
+          row.classList.add('selected');
+        }
+      }
+    }
+
+    customElements.define('x-crud', CRUDView);
+
+    function main() {
+      let appView = new CRUDView();
+      document.body.appendChild(appView);
+    }
+
+    window.onload = main;
+  </script>
+
+</body>
+</html>
